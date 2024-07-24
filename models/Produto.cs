@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LancheTCE_Back.models
 {
     [Table("Produtos")]
-    public class Produtos
+    public class Produto
     {
         [Key]
         public int ProdutoId { get; set; }
@@ -22,6 +22,9 @@ namespace LancheTCE_Back.models
         [Column(TypeName = "decimal(10,2)")]
         public decimal Preco { get; set; }
 
-        public string? Categoria{get; set;}
+        public string? Categoria { get; set; }
+
+        // public int VendedorId{get; set;}
+
     }
 }

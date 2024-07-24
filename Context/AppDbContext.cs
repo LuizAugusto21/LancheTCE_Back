@@ -10,7 +10,7 @@ namespace LancheTCE.Context
         {
         }
 
-        public DbSet<Produtos> produtos {get; set;}
+        public DbSet<Produto> produtos {get; set;}
 
     }
 }
