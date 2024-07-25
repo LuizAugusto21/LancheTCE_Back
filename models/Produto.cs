@@ -16,13 +16,16 @@ namespace LancheTCE_Back.models
         [Required]
         [StringLength(300)]
         public string? Descricao { get; set; }
+
         [Required]
         [Column(TypeName = "decimal(10,2)")]
         public decimal Preco { get; set; }
 
         public string? Categoria { get; set; }
+        public int Quantidade { get; set; }
 
-        // public int VendedorId{get; set;}
-
+        [ForeignKey("UsuarioVendedor")]
+        public int IdUsuarioVendedor { get; set; }
+        public Usuario? UsuarioVendedor { get; set; }
     }
 }

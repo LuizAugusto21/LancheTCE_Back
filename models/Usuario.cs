@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LancheTCE_Back.models
 {
     [Table("Usuarios")]
-    public class Usuarios
+    public class Usuario
     {
         [Key]
         public int UsuarioId { get; set; }
@@ -24,5 +24,13 @@ namespace LancheTCE_Back.models
         [Required]
         [StringLength(20)]
         public string? Perfil { get; set; }
+
+        [ForeignKey("Endereco")]
+        public int? IdEndereco { get; set; }
+        public Endereco? Endereco { get; set; }
+
+        public ICollection<Produto>? ProdutosVendidos { get; set; }
+        public ICollection<Pedido>? PedidosComoVendedor { get; set; }
+        public ICollection<Pedido>? PedidosComoCliente { get; set; }
     }
 }
