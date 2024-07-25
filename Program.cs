@@ -25,7 +25,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(typeof(ProdutoDTOMappingProfile));
+builder.Services.AddAutoMapper(typeof(UsuarioDTOMappingProfile));
 
 builder.Services.AddControllers();
 
