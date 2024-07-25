@@ -39,12 +39,12 @@ namespace LancheTCE.Context
                 .WithMany(u => u.PedidosComoCliente)
                 .HasForeignKey(p => p.IdUsuarioCliente);
 
-            modelBuilder.Entity<Pedido_Produto>()
+            modelBuilder.Entity<ProdutoPedido>()
                 .HasOne(pp => pp.Produto)
                 .WithMany()
                 .HasForeignKey(pp => pp.IdProduto);
 
-            modelBuilder.Entity<Pedido_Produto>()
+            modelBuilder.Entity<ProdutoPedido>()
                 .HasOne(pp => pp.Pedido)
                 .WithMany(p => p.PedidosProdutos)
                 .HasForeignKey(pp => pp.IdPedido);

@@ -1,4 +1,4 @@
-using APICatalogo.Repositories;
+using LancheTCE.Context;
 using LancheTCE_Back.Repositories.Produtos;
 
 namespace LancheTCE_Back.Repositories
@@ -8,12 +8,12 @@ namespace LancheTCE_Back.Repositories
         private IProdutoRepository? _produtoRepo;
         private IUsuarioRepository? _usuarioRepo;
         private IPedidoRepository? _pedidoRepo;
-        private IPedidoProdutoRepository? _pedidoProdutoRepo;
+        private IProdutoPedidoRepository? _pedidoProdutoRepo;
         private IEnderecoRepository? _enderecoRepo;
 
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
 
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork(AppDbContext context)
         {
             _context = context;
         }
@@ -69,7 +69,4 @@ namespace LancheTCE_Back.Repositories
         }
     }
 
-    internal interface IPedidoProdutoRepository
-    {
-    }
 }

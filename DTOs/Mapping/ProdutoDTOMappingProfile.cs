@@ -2,6 +2,7 @@
 using LancheTCE_Back.DTOs;
 using LancheTCE_Back.models;
 using AutoMapper;
+using LancheTCE_Back.DTOs.ProdutoDTO;
 
 namespace LancheTCE_Back.Mapping;
 
