@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LancheTCE_Back.models
 {
-  public class UsuarioDTO
+  public class UsuarioGETDTO
   {
     public int UsuarioId { get; set; }
 

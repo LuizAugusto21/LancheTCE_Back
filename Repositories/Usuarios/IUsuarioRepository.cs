@@ -1,7 +1,10 @@
+using LancheTCE_Back.models;
+
 namespace LancheTCE_Back.Repositories
 {
-  public interface IUsuarioRepository
+  public interface IUsuarioRepository : IRepository<Usuario>
   {
-    // Métodos específicos para o repositório de usuários
+    PagedList<Usuario> GetUsuarios(UserParameters userParameters);
+    PagedList<Usuario> GetUsuariosFiltro(UsuarioFiltroParameters usuarioFiltroParameters);
   }
 }

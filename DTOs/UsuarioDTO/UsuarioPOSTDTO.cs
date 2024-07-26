@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LancheTCE_Back.models
 {
-  public class UsuarioDTO
+  public class UsuarioPOSTDTO
   {
-    public int UsuarioId { get; set; }
-
     public string? Nome { get; set; }
 
     public string? Email { get; set; }
