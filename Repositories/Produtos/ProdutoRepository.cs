@@ -1,5 +1,6 @@
 using LancheTCE.Context;
 using LancheTCE_Back.models;
+using LancheTCE_Back.models.filters;
 using LancheTCE_Back.Repositories.Produtos;
 
 namespace LancheTCE_Back.Repositories;
@@ -10,12 +11,12 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     {
     }
 
-    /*public IEnumerable<Produto> GetProdutosPorCategoria(int id)
+    public IEnumerable<Produto> GetProdutosPorCategoria(string Categoria)
     {
-        return GetAll().Where(c => c.CategoriaId == id);
-    }*/
+        return GetAll().Where(c => c.Categoria.ToLower().Contains(Categoria.ToLower()));
+    }
 
-    /*public PagedList<Produto> GetProdutos(ProdutosParameters produtosParameters)
+    public PagedList<Produto> GetProdutos(ProdutoFiltroParameters produtosParameters)
     {
         var produtos = GetAll()
             .OrderBy(p => p.ProdutoId).AsQueryable();
@@ -23,9 +24,9 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
             produtosParameters.PageNumber, produtosParameters.PageSize);
 
         return produtosOrdenados;
-    }*/
+    }
 
-    /*public PagedList<Produto> GetProdutosFiltroPreco(ProdutosFiltroPreco produtosFiltroParams)
+    public PagedList<Produto> GetProdutosFiltroPreco(ProdutoFiltroPreco produtosFiltroParams)
     {
         var produtos = GetAll().AsQueryable();
 
@@ -48,5 +49,16 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
         var produtosFiltrados = PagedList<Produto>.ToPagedList(produtos, produtosFiltroParams.PageNumber, produtosFiltroParams.PageSize);
 
         return produtosFiltrados;
-    }*/
+    }
+
+    public PagedList<Produto> GetProdutosFiltroNome(ProdutoFiltroParameters produtosFilterParameters)
+    {
+        var produtos = GetAll().AsQueryable();
+
+        produtos = produtos.Where(p => p.Nome.ToLower().Contains(produtosFilterParameters.Nome.ToLower()));
+
+        var produtosFiltrados = PagedList<Produto>.ToPagedList(produtos, produtosFilterParameters.PageNumber, produtosFilterParameters.PageSize);
+
+        return produtosFiltrados;
+    }
 }
