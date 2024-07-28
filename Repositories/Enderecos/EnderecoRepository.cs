@@ -16,7 +16,6 @@ namespace LancheTCE_Back.Repositories
 
       if (enderecoExistente != null)
       {
-        // Atualize o endereço existente
         enderecoExistente.Andar = endereco.Andar;
         enderecoExistente.Sala = endereco.Sala;
         enderecoExistente.Departamento = endereco.Departamento;
@@ -24,7 +23,6 @@ namespace LancheTCE_Back.Repositories
         return enderecoExistente;
       }
 
-      // Crie um novo endereço
       _context.Enderecos.Add(endereco);
       return endereco;
     }

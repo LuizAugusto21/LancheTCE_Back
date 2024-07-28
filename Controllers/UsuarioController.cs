@@ -22,7 +22,6 @@ namespace LancheTCE_Back.Controllers
     [HttpGet]
     public ActionResult<IEnumerable<UsuarioGETDTO>> Get()
     {
-      //var usuarios = _uof.UsuarioRepository.GetAll();
       var usuarios = _uof.UsuarioRepository.GetUsuarios(new UserParameters());
 
       if (usuarios == null)
@@ -74,13 +73,12 @@ namespace LancheTCE_Back.Controllers
       if (usuario == null)
         return NotFound("Usuário não encontrado...");
 
-      // Atualize o usuário
       usuario.Nome = usuarioDto.Nome;
       usuario.Email = usuarioDto.Email;
       usuario.Senha = usuarioDto.Senha;
       usuario.Perfil = usuarioDto.Perfil;
+      usuario.Contato = usuarioDto.Contato;
 
-      // Verifique se o endereço é nulo
       if (usuarioDto.Endereco == null)
       {
         return BadRequest("O endereço não pode ser nulo ao atualizar um usuário.");
@@ -88,21 +86,18 @@ namespace LancheTCE_Back.Controllers
 
       if (usuario.Endereco.EnderecoId == usuarioDto.Endereco.EnderecoId)
       {
-        // Atualize o endereço existente do usuário
         usuario.Endereco.Andar = usuarioDto.Endereco.Andar;
         usuario.Endereco.Sala = usuarioDto.Endereco.Sala;
         usuario.Endereco.Departamento = usuarioDto.Endereco.Departamento;
       }
       else if (usuario.Endereco == null)
       {
-        // Verifique se o endereço já existe
         var enderecoExistente = _uof.EnderecoRepository.Get(e => e.EnderecoId == usuarioDto.Endereco.EnderecoId);
         if (enderecoExistente != null)
         {
           return BadRequest("Não é possível atualizar um endereço que já pertence a outro usuário.");
         }
 
-        // Crie ou atualize o endereço
         var endereco = _mapper.Map<Endereco>(usuarioDto.Endereco);
         var enderecoAtualizado = _uof.UsuarioRepository.CreateOrUpdateEndereco(endereco);
         usuario.Endereco = enderecoAtualizado;
@@ -112,7 +107,6 @@ namespace LancheTCE_Back.Controllers
         return BadRequest("Não é possível criar um endereço pois já existe um endereço cadastrado para este usuário.");
       }
 
-      // Atualize o usuário no repositório
       var usuarioAtualizado = _uof.UsuarioRepository.Update(usuario);
       _uof.Commit();
 
