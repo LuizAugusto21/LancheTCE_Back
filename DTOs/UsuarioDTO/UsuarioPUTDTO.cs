@@ -1,6 +1,6 @@
 namespace LancheTCE_Back.models
 {
-  public class UsuarioGETDTO
+  public class UsuarioPUTDTO
   {
     public int UsuarioId { get; set; }
     public string? Nome { get; set; }

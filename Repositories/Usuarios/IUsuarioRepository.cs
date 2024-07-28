@@ -6,5 +6,7 @@ namespace LancheTCE_Back.Repositories
   {
     PagedList<Usuario> GetUsuarios(UserParameters userParameters);
     PagedList<Usuario> GetUsuariosFiltro(UsuarioFiltroParameters usuarioFiltroParameters);
+    Endereco CreateOrUpdateEndereco(Endereco endereco);
+    Usuario GetUsuarioComEndereco(int id);
   }
 }

@@ -1,5 +1,6 @@
 using LancheTCE.Context;
 using LancheTCE_Back.models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LancheTCE_Back.Repositories
 {
@@ -11,7 +12,7 @@ namespace LancheTCE_Back.Repositories
 
     public PagedList<Usuario> GetUsuarios(UserParameters userParameters)
     {
-      var query = _context.Usuarios.AsQueryable();
+      var query = _context.Usuarios.Include(u => u.Endereco).AsQueryable();
 
       if (!string.IsNullOrWhiteSpace(userParameters.Nome))
       {
@@ -30,7 +31,7 @@ namespace LancheTCE_Back.Repositories
 
     public PagedList<Usuario> GetUsuariosFiltro(UsuarioFiltroParameters usuarioFiltroParameters)
     {
-      var query = _context.Usuarios.AsQueryable();
+      var query = _context.Usuarios.Include(u => u.Endereco).AsQueryable();
 
       if (!string.IsNullOrWhiteSpace(usuarioFiltroParameters.Nome))
       {
@@ -45,6 +46,33 @@ namespace LancheTCE_Back.Repositories
       return PagedList<Usuario>.ToPagedList(query,
           usuarioFiltroParameters.PageNumber,
           usuarioFiltroParameters.PageSize);
+    }
+
+    public Endereco CreateOrUpdateEndereco(Endereco endereco)
+    {
+      var enderecoExistente = _context.Enderecos
+          .FirstOrDefault(e => e.EnderecoId == endereco.EnderecoId);
+
+      if (enderecoExistente == null)
+      {
+        _context.Enderecos.Add(endereco);
+      }
+      else
+      {
+        enderecoExistente.Andar = endereco.Andar;
+        enderecoExistente.Sala = endereco.Sala;
+        enderecoExistente.Departamento = endereco.Departamento;
+        _context.Enderecos.Update(enderecoExistente);
+        endereco = enderecoExistente;
+      }
+
+      _context.SaveChanges();
+      return endereco;
+    }
+
+    public Usuario GetUsuarioComEndereco(int id)
+    {
+      return _context.Usuarios.Include(u => u.Endereco).FirstOrDefault(u => u.UsuarioId == id);
     }
   }
 }

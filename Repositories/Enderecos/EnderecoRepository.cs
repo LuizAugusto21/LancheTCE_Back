@@ -1,11 +1,32 @@
 using LancheTCE.Context;
 using LancheTCE_Back.models;
 
-namespace LancheTCE_Back.Repositories;
-
-public class EnderecoRepository : Repository<Endereco>, IEnderecoRepository
+namespace LancheTCE_Back.Repositories
 {
-  public EnderecoRepository(AppDbContext context) : base(context)
+  public class EnderecoRepository : Repository<Endereco>, IEnderecoRepository
   {
+    public EnderecoRepository(AppDbContext context) : base(context)
+    {
+    }
+
+    public Endereco CreateOrUpdateEndereco(Endereco endereco)
+    {
+      var enderecoExistente = _context.Enderecos
+          .FirstOrDefault(e => e.EnderecoId == endereco.EnderecoId);
+
+      if (enderecoExistente != null)
+      {
+        // Atualize o endereço existente
+        enderecoExistente.Andar = endereco.Andar;
+        enderecoExistente.Sala = endereco.Sala;
+        enderecoExistente.Departamento = endereco.Departamento;
+        _context.Enderecos.Update(enderecoExistente);
+        return enderecoExistente;
+      }
+
+      // Crie um novo endereço
+      _context.Enderecos.Add(endereco);
+      return endereco;
+    }
   }
 }

@@ -1,5 +1,3 @@
-
-using LancheTCE_Back.DTOs;
 using LancheTCE_Back.models;
 using AutoMapper;
 
@@ -10,8 +8,13 @@ public class UsuarioDTOMappingProfile : Profile
   public UsuarioDTOMappingProfile()
   {
 
-    CreateMap<Usuario, UsuarioDTO>().ReverseMap();
-    CreateMap<Usuario, UsuarioGETDTO>().ReverseMap();
-    CreateMap<Usuario, UsuarioPOSTDTO>().ReverseMap();
+    CreateMap<Usuario, UsuarioGETDTO>()
+                .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => src.Endereco));
+
+    CreateMap<UsuarioPOSTDTO, Usuario>()
+        .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => src.Endereco));
+
+    CreateMap<UsuarioPUTDTO, Usuario>()
+            .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => src.Endereco != null ? src.Endereco : null));
   }
 }
