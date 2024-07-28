@@ -24,6 +24,8 @@ namespace LancheTCE_Back.models
         public string? Categoria { get; set; }
         public int Quantidade { get; set; }
 
+        public string? ImagemUrl { get; set; }
+
         [ForeignKey(nameof(UsuarioVendedor))]
         public int IdUsuarioVendedor { get; set; }
         public Usuario? UsuarioVendedor { get; set; }
