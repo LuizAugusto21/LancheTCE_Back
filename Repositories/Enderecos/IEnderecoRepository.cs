@@ -1,7 +1,10 @@
+using LancheTCE_Back.models;
+
 namespace LancheTCE_Back.Repositories
 {
-  public interface IEnderecoRepository
+  public interface IEnderecoRepository : IRepository<Endereco>
   {
-    // Métodos específicos para o repositório de endereços
+    Endereco CreateOrUpdateEndereco(Endereco endereco);
   }
+
 }

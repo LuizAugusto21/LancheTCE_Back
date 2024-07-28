@@ -25,6 +25,9 @@ namespace LancheTCE_Back.models
         [StringLength(20)]
         public string? Perfil { get; set; }
 
+        [StringLength(15)]
+        public string? Contato { get; set; }
+
         [ForeignKey("Endereco")]
         public int? IdEndereco { get; set; }
         public Endereco? Endereco { get; set; }
