@@ -1,6 +1,5 @@
 using AutoMapper;
 using LancheTCE_Back.DTOs.PedidoDTO;
-using LancheTCE_Back.DTOs.ProdutoDTO;
 using LancheTCE_Back.models;
 using LancheTCE_Back.models.filters;
 using LancheTCE_Back.Repositories;
@@ -10,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace LancheTCE_Back.Controllers;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class PedidosController : ControllerBase
 {
@@ -19,11 +18,13 @@ public class PedidosController : ControllerBase
 
     public PedidosController(IUnitOfWork uof, IMapper mapper)
     {
-        _uof= uof;
+        _uof = uof;
         _mapper = mapper;
     }
+
     [HttpGet]
-    public ActionResult<IEnumerable<Pedido>> Get(){
+    public ActionResult<IEnumerable<Pedido>> Get()
+    {
         var pedidos = _uof.PedidoRepository.GetAll();
         if (pedidos is null)
             return NotFound("Pedido não encontrado...");
@@ -36,9 +37,9 @@ public class PedidosController : ControllerBase
     public ActionResult<PedidoDTO> Get(int id)
     {
         var pedido = _uof.PedidoRepository.Get(p => p.PedidoId == id);
-        if(pedido is null)
+        if (pedido is null)
             return NotFound("Pedido não encontrado...");
-        
+
         var pedidoDTO = _mapper.Map<PedidoDTO>(pedido);
         return Ok(pedidoDTO);
     }
@@ -57,9 +58,10 @@ public class PedidosController : ControllerBase
         return ObterPedidos(pedidos);
     }
 
-    public ActionResult<IEnumerable<PedidoDTO>> ObterPedidos(PagedList<Pedido> pedidos)
+    private ActionResult<IEnumerable<PedidoDTO>> ObterPedidos(PagedList<Pedido> pedidos)
     {
-        var metadata = new{
+        var metadata = new
+        {
             pedidos.TotalCount,
             pedidos.PageSize,
             pedidos.CurrentPage,
@@ -80,7 +82,8 @@ public class PedidosController : ControllerBase
     {
         var pedidos = _uof.PedidoRepository.GetPedidos(pedidoParameters);
 
-        var metadata = new{
+        var metadata = new
+        {
             pedidos.TotalCount,
             pedidos.PageSize,
             pedidos.CurrentPage,
@@ -101,7 +104,7 @@ public class PedidosController : ControllerBase
     {
         if (pedidoDTO is null)
             return BadRequest();
-        
+
         var pedido = _mapper.Map<Pedido>(pedidoDTO);
 
         var novoPedido = _uof.PedidoRepository.Create(pedido);
@@ -110,7 +113,7 @@ public class PedidosController : ControllerBase
         var novoPedidoDTO = _mapper.Map<PedidoDTO>(novoPedido);
 
         return new CreatedAtRouteResult("ObterPedido",
-            new {id = novoPedidoDTO.PedidoId}, novoPedidoDTO);
+            new { id = novoPedidoDTO.PedidoId }, novoPedidoDTO);
     }
 
     [HttpPut("{id:int}")]
@@ -133,10 +136,10 @@ public class PedidosController : ControllerBase
         var pedido = _uof.PedidoRepository.Get(p => p.PedidoId == id);
         if (pedido is null)
             return NotFound("Pedido não encontrado...");
-        
+
         var pedidoDeletado = _uof.PedidoRepository.Delete(pedido);
         _uof.Commit();
-        
+
         var pedidoDeletadoDTO = _mapper.Map<PedidoDTO>(pedidoDeletado);
 
         return Ok(pedidoDeletadoDTO);
