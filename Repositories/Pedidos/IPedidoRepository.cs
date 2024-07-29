@@ -1,7 +1,8 @@
-namespace LancheTCE_Back.Repositories
+using LancheTCE_Back.models;
+
+namespace LancheTCE_Back.Repositories;
+
+public interface IPedidoRepository : IRepository<Pedido>
 {
-  public interface IPedidoRepository
-  {
-    // Métodos específicos para o repositório de pedidos
-  }
+  PagedList<Pedido> GetPedidos(PedidoParameters pedidoParameters);
 }
