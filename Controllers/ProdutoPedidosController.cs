@@ -28,16 +28,16 @@ public class ProdutoPedidosController : ControllerBase
         return Ok(produtoPedidosDto);
     }
 
-    /*[HttpPost]
+    [HttpPost]
     public ActionResult<PedidoDTO> AddProdutoAoPedido(int pedidoId, int produtoId)
     {
-        var pedido = _uof.PedidoRepository.Get(p => p.PedidoId == pedidoId);
+        var pedido = _uof.ProdutoPedidoRepository.Get(p => p.PedidoId == pedidoId);
         if (pedido is null)
         {
             return NotFound("Pedido não encontrado...");
         }
 
-        var produto = _uof.ProdutoRepository.Get(p => p.ProdutoId == produtoId);
+        var produto = _uof.ProdutoPedidoRepository.Get(p => p.ProdutoId == produtoId);
         if (produto is null)
         {
             return NotFound("Produto não encontrado...");
@@ -52,7 +52,7 @@ public class ProdutoPedidosController : ControllerBase
         _uof.ProdutoPedidoRepository.Create(produtoPedido);
         var produtoPedidoDTO = _mapper.Map<ProdutoPedidoDTO>(produtoPedido);
         return Ok(produtoPedidoDTO);
-    }*/
+    }
 
     /*[HttpPatch]
     public ActionResult<PedidoDTO> Patch(int pedidoId, int produtoId, [FromBody] JsonPatchDocument<PedidoDTOUpdateRequest> patchPedidoDTO)

@@ -12,6 +12,7 @@ namespace LancheTCE_Back.models
         [Required]
         [StringLength(20)]
         public string? Status { get; set; }
+        public int ValorTotal { get; set; }
 
         [ForeignKey("UsuarioVendedor")]
         public int IdUsuarioVendedor { get; set; }

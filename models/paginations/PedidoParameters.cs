@@ -15,4 +15,5 @@ public class PedidoParameters
     }
   }
   public string? Status { get; set; }
+  public int ValorTotal { get; set; }
 }

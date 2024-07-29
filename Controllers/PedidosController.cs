@@ -2,6 +2,7 @@ using AutoMapper;
 using LancheTCE_Back.DTOs.PedidoDTO;
 using LancheTCE_Back.DTOs.ProdutoDTO;
 using LancheTCE_Back.models;
+using LancheTCE_Back.models.filters;
 using LancheTCE_Back.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,9 @@ public class PedidosController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<Pedido>> Get(){
         var pedidos = _uof.PedidoRepository.GetAll();
+        if (pedidos is null)
+            return NotFound("Pedido não encontrado...");
+
         var pedidosDto = _mapper.Map<IEnumerable<Pedido>>(pedidos);
         return Ok(pedidosDto);
     }
@@ -37,6 +41,38 @@ public class PedidosController : ControllerBase
         
         var pedidoDTO = _mapper.Map<PedidoDTO>(pedido);
         return Ok(pedidoDTO);
+    }
+
+    [HttpGet("filter/status/pagination")]
+    public ActionResult<IEnumerable<PedidoDTO>> GetPedidoFilterStatus([FromQuery] PedidoFiltroParameters pedidoFiltroParameters)
+    {
+        var pedidos = _uof.PedidoRepository.GetPedidosFiltroStatus(pedidoFiltroParameters);
+        return ObterPedidos(pedidos);
+    }
+
+    [HttpGet("filter/valor/pagination")]
+    public ActionResult<IEnumerable<PedidoDTO>> GetPedidoFilterValor([FromQuery] PedidoFiltroValor pedidoFiltroValor)
+    {
+        var pedidos = _uof.PedidoRepository.GetPedidosFiltroValor(pedidoFiltroValor);
+        return ObterPedidos(pedidos);
+    }
+
+    public ActionResult<IEnumerable<PedidoDTO>> ObterPedidos(PagedList<Pedido> pedidos)
+    {
+        var metadata = new{
+            pedidos.TotalCount,
+            pedidos.PageSize,
+            pedidos.CurrentPage,
+            pedidos.TotalPages,
+            pedidos.HasNext,
+            pedidos.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+        var pedidosDTO = _mapper.Map<IEnumerable<PedidoDTO>>(pedidos);
+
+        return Ok(pedidosDTO);
     }
 
     [HttpGet("pagination")]
