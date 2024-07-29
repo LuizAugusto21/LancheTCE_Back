@@ -1,7 +1,9 @@
+using LancheTCE_Back.models;
+
 namespace LancheTCE_Back.Repositories
 {
-  public interface IProdutoPedidoRepository
+  public interface IProdutoPedidoRepository : IRepository<ProdutoPedido>
   {
-    // Métodos específicos para o repositório de endereços
+    
   }
 }
