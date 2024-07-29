@@ -74,5 +74,10 @@ namespace LancheTCE_Back.Repositories
     {
       return _context.Usuarios.Include(u => u.Endereco).FirstOrDefault(u => u.UsuarioId == id);
     }
+
+    public async Task<Usuario> GetUsuarioPorEmail(string email)
+    {
+      return await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+    }
   }
 }

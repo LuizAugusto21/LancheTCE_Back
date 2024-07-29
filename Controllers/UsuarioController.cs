@@ -3,6 +3,11 @@ using LancheTCE_Back.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity.Data;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace LancheTCE_Back.Controllers
 {
@@ -12,11 +17,13 @@ namespace LancheTCE_Back.Controllers
   {
     private readonly IUnitOfWork _uof;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
 
-    public UsuarioController(IUnitOfWork uof, IMapper mapper)
+    public UsuarioController(IUnitOfWork uof, IMapper mapper, IConfiguration configuration)
     {
       _uof = uof;
       _mapper = mapper;
+      _configuration = configuration;
     }
 
     [HttpGet]
@@ -60,6 +67,50 @@ namespace LancheTCE_Back.Controllers
 
       return new CreatedAtRouteResult("ObterUsuario",
           new { id = novoUsuarioDto.UsuarioId }, novoUsuarioDto);
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<LoginResponseDTO>> Login([FromBody] LoginDTO loginDto)
+    {
+      if (loginDto == null)
+        return BadRequest("Dados de login inválidos.");
+
+      var usuario = await _uof.UsuarioRepository.GetUsuarioPorEmail(loginDto.Email);
+
+      if (usuario == null || usuario.Senha != loginDto.Senha)
+        return Unauthorized("Email ou senha inválidos.");
+
+      var token = GenerateJwtToken(usuario);
+
+      var loginResponse = new LoginResponseDTO
+      {
+        Token = token,
+        Nome = usuario.Nome,
+        Email = usuario.Email
+      };
+
+      return Ok(loginResponse);
+    }
+
+    private string GenerateJwtToken(Usuario usuario)
+    {
+      var claims = new[]
+      {
+                new Claim(JwtRegisteredClaimNames.Sub, usuario.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+      var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+      var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+      var token = new JwtSecurityToken(
+          issuer: _configuration["Jwt:Issuer"],
+          audience: _configuration["Jwt:Audience"],
+          claims: claims,
+          expires: DateTime.Now.AddMinutes(30),
+          signingCredentials: creds);
+
+      return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     [HttpPut("{id:int}")]
